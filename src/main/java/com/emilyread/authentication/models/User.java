@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 @Table(name="users")
 public class User {
 	
-	 @Id
+	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 	@Email(message="email must be valid")

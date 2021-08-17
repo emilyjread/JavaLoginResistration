@@ -26,13 +26,23 @@ public class MainController {
 		this.userService = userService;
 	}
 	
+	//home page after login
+	
 	@RequestMapping("/home")
 	public String home(@ModelAttribute("user") User user, Model model,  HttpSession session) {
-
-		User u = (User) session.getAttribute("user");
-		model.addAttribute("user", u);
-		return "index.jsp";
+		
+		Long u_id = (Long) session.getAttribute("user_id");
+		
+		if (u_id!=null) {
+			User thisUser = userService.findUserById(u_id);
+			model.addAttribute("user", thisUser);
+			return "index.jsp";
+		}
+		
+		return "redirect:/login";
 	}
+	
+	//Registration page and register
 
 	@RequestMapping("/registration")
 	public String registrationForm(@ModelAttribute("user") User user) {
@@ -47,10 +57,12 @@ public class MainController {
 		}
 		else {
 			User u = userService.registerUser(user);
-			session.setAttribute("user", u);
+			session.setAttribute("user_id", u.getId());
 			return "redirect:/home";
 		}
 	}
+	
+	//Login page and verification
 	
 	@RequestMapping("/login")
 	public String loginForm(@ModelAttribute("user") User user) {
@@ -66,14 +78,15 @@ public class MainController {
 		else {
 			userService.authenticateUser(email, password);
 			User u = userService.registerUser(user);
-			session.setAttribute("user", u);
+			session.setAttribute("user_id", u.getId());
 			return "redirect:/home";
 		}
 	}
 	
 	
 	@RequestMapping("/logout")
-	public String logout() {
+	public String logout(HttpSession session) {
+		session.invalidate();
 		return "redirect:/login";
 	}
 	

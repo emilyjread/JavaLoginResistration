@@ -10,12 +10,19 @@ import com.emilyread.authentication.repos.UserRepo;
 
 @Service
 public class UserService {
+
+	
+	//short way for-->
+//@Autowired
+//private final UserRepo userRepository;	
 	
 private final UserRepo userRepository;
     
     public UserService(UserRepo userRepository) {
         this.userRepository = userRepository;
     }
+    
+//<--    
     
     // register user and hash their password
     public User registerUser(User user) {
